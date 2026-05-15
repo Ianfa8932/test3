@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <style>
+/* =========================================================
+1. GLOBAL DESIGN SYSTEM
+========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700;900&display=swap');
+
+:root {
+  /* Main palette */
+  --blue-light: #d6eef9;
+  --blue-soft: #9ed6f5;
+  --blue-main: #5ba8e0;
+  --blue-dark: #2d7cbf;
+
+  --pink-soft: #ffd6e8;
+  --pink-main: #e96fa3;
+
+  --lavender-soft: #e7dcff;
+  --lavender-main: #8b6fe8;
+
+  --mint-soft: #d9f7e8;
+  --mint-main: #4abf8a;
+
+  --peach-soft: #ffe3cc;
+  --peach-main: #f59a5f;
+
+  --gold-soft: #fff1c7;
+  --gold-main: #d4a55a;
+
+  /* Text */
+  --text-dark: #17324a;
+  --text-mid: #3a6080;
+  --text-soft: #6a90b0;
+
+  /* Surfaces */
+  --white-glass: rgba(255, 255, 255, 0.84);
+  --white-solid: #ffffff;
+  --border-soft: rgba(255, 255, 255, 0.85);
+}
+
+/* =========================================================
+2. RESET AND PAGE BACKGROUND
+========================================================= */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Lato', sans-serif;
+  color: var(--text-dark);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255, 214, 232, 0.85), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(231, 220, 255, 0.85), transparent 28%),
+    radial-gradient(circle at 85% 80%, rgba(217, 247, 232, 0.80), transparent 28%),
+    linear-gradient(135deg, #d6eef9 0%, #edf7ff 45%, #cde4f5 100%);
+}
+
+.app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* =========================================================
+3. ANIMATED BACKGROUND BUBBLES
+========================================================= */
+
+.bubbles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  animation: floatUp linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(110vh) scale(0.8);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: translateY(-10vh) scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+4. SLIDE LAYOUT
+========================================================= */
+
+.slides-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  transform: translateX(60px);
+  pointer-events: none;
+  transition:
+    opacity 0.6s cubic-bezier(.4, 0, .2, 1),
+    transform 0.6s cubic-bezier(.4, 0, .2, 1);
+}
+
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+.slide.exit {
+  opacity: 0;
+  transform: translateX(-60px);
+}
+
+/* =========================================================
+5. CARD DESIGN
+========================================================= */
+
+.card {
+  width: 100%;
+  max-width: 620px;
+  padding: 2.3rem 2.7rem;
+  text-align: center;
+  border-radius: 30px;
+  border: 1px solid var(--border-soft);
+  background: var(--white-glass);
+  backdrop-filter: blur(22px);
+  box-shadow:
+    0 24px 70px rgba(45, 124, 191, 0.16),
+    0 6px 18px rgba(45, 124, 191, 0.10);
+}
+
+.card.wide {
+  max-width: 680px;
+}
+
+/* Colored slide accents */
+.card.cover {
+  border-top: 8px solid var(--pink-main);
+}
+
+.card.metro {
+  border-top: 8px solid var(--blue-main);
+}
+
+.card.cafe {
+  border-top: 8px solid var(--mint-main);
+}
+
+.card.art {
+  border-top: 8px solid var(--lavender-main);
+}
+
+.card.food {
+  border-top: 8px solid var(--peach-main);
+}
+
+.card.river {
+  border-top: 8px solid var(--blue-dark);
+}
+
+.card.time {
+  border-top: 8px solid var(--gold-main);
+}
+
+.card.confirm {
+  border-top: 8px solid var(--pink-main);
+}
+
+/* =========================================================
+6. TYPOGRAPHY
+========================================================= */
+
+.slide-num {
+  margin-bottom: 0.8rem;
+  color: var(--blue-dark);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.slide-icon {
+  display: block;
+  margin-bottom: 0.8rem;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.slide-title {
+  margin-bottom: 0.6rem;
+  color: var(--text-dark);
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.slide-title.large {
+  font-size: 2.45rem;
+}
+
+.slide-subtitle {
+  margin-bottom: 1.2rem;
+  color: var(--text-mid);
+  font-size: 0.96rem;
+  font-weight: 300;
+  line-height: 1.65;
+}
+
+.cover-hearts {
+  margin-bottom: 1.2rem;
+  font-size: 1.45rem;
+  letter-spacing: 6px;
+  opacity: 0.8;
+}
+
+.cover-date-tag,
+.sikmul-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1rem;
+  padding: 6px 18px;
+  color: white;
+  font-size: 0.76rem;
+  font-weight: 900;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pink-main), var(--blue-main));
+}
+
+.cover-tagline {
+  margin-top: 0.9rem;
+  color: var(--text-soft);
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* =========================================================
+7. INFORMATION BLOCKS
+========================================================= */
+
+.info-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 9px;
+  padding: 12px 15px;
+  text-align: left;
+  border-radius: 16px;
+  border: 1px solid rgba(91, 168, 224, 0.18);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.info-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 1.35rem;
+}
+
+.info-text {
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.info-text strong {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--text-dark);
+  font-size: 0.94rem;
+  font-weight: 900;
+}
+
+/* =========================================================
+8. MINI CARDS
+========================================================= */
+
+.cafe-grid {
+  display: grid;
+  gap: 9px;
+  margin-top: 0.85rem;
+}
+
+.cafe-card {
+  padding: 12px 14px;
+  text-align: left;
+  border-radius: 16px;
+  border: 1px solid rgba(91, 168, 224, 0.22);
+  background: rgba(255, 255, 255, 0.56);
+}
+
+.cafe-card.mint {
+  background: linear-gradient(135deg, rgba(217, 247, 232, 0.72), rgba(255, 255, 255, 0.58));
+}
+
+.cafe-card.lavender {
+  background: linear-gradient(135deg, rgba(231, 220, 255, 0.72), rgba(255, 255, 255, 0.58));
+}
+
+.cafe-card.peach {
+  background: linear-gradient(135deg, rgba(255, 227, 204, 0.72), rgba(255, 255, 255, 0.58));
+}
+
+.cafe-card.blue {
+  background: linear-gradient(135deg, rgba(214, 238, 249, 0.78), rgba(255, 255, 255, 0.58));
+}
+
+.cafe-stars {
+  margin-bottom: 3px;
+  color: var(--gold-main);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.cafe-name {
+  margin-bottom: 3px;
+  color: var(--text-dark);
+  font-size: 0.91rem;
+  font-weight: 900;
+}
+
+.cafe-detail {
+  color: var(--text-soft);
+  font-size: 0.79rem;
+  line-height: 1.5;
+}
+
+/* =========================================================
+9. TIME PICKER
+========================================================= */
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-height: 270px;
+  margin-top: 0.9rem;
+  padding-right: 2px;
+  overflow-y: auto;
+}
+
+.time-btn {
+  padding: 11px 4px;
+  border: 1.5px solid rgba(212, 165, 90, 0.45);
+  border-radius: 13px;
+  background: linear-gradient(135deg, rgba(255, 241, 199, 0.85), rgba(255, 255, 255, 0.65));
+  color: var(--text-mid);
+  font-family: 'Lato', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.time-btn:hover {
+  color: var(--text-dark);
+  border-color: var(--gold-main);
+  background: var(--gold-soft);
+  transform: translateY(-1px);
+}
+
+.time-btn.selected {
+  color: white;
+  border-color: var(--gold-main);
+  background: linear-gradient(135deg, var(--gold-main), #c87c3d);
+  box-shadow: 0 5px 14px rgba(212, 165, 90, 0.36);
+}
+
+.selected-display {
+  min-height: 20px;
+  margin-top: 8px;
+  color: var(--blue-dark);
+  font-size: 0.84rem;
+  font-weight: 900;
+}
+
+/* =========================================================
+10. CONFIRMATION
+========================================================= */
+
+.confirm-emoji {
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 3.4rem;
+}
+
+.confirm-box {
+  margin: 0.65rem 0;
+  padding: 1.15rem 1.6rem;
+  border-radius: 20px;
+  border: 1.5px solid rgba(233, 111, 163, 0.30);
+  background: linear-gradient(135deg, rgba(255, 214, 232, 0.72), rgba(214, 238, 249, 0.62));
+}
+
+.confirm-label {
+  margin-bottom: 5px;
+  color: var(--pink-main);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.confirm-value {
+  color: var(--text-dark);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.65rem;
+  font-weight: 600;
+}
+
+/* =========================================================
+11. BUTTONS
+========================================================= */
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.next-btn,
+.back-btn,
+.video-btn,
+.open-btn {
+  font-family: 'Lato', sans-serif;
+  font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.next-btn {
+  margin-top: 1.35rem;
+  padding: 12px 34px;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, var(--blue-main), var(--blue-dark));
+  box-shadow: 0 7px 20px rgba(45, 124, 191, 0.30);
+}
+
+.next-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 11px 28px rgba(45, 124, 191, 0.40);
+}
+
+.next-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.back-btn {
+  margin-top: 1.35rem;
+  padding: 10px 24px;
+  color: var(--blue-dark);
+  border: 1.5px solid rgba(91, 168, 224, 0.48);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.back-btn:hover {
+  background: rgba(91, 168, 224, 0.12);
+  border-color: var(--blue-main);
+}
+
+.video-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0.9rem auto 0;
+  padding: 11px 28px;
+  color: var(--text-dark);
+  border: 1.5px solid rgba(233, 111, 163, 0.38);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  font-size: 0.88rem;
+  letter-spacing: 1px;
+}
+
+.video-btn:hover {
+  background: rgba(255, 214, 232, 0.44);
+}
+
+/* =========================================================
+12. PROGRESS DOTS
+========================================================= */
+
+.progress-dots {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.62);
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  width: 24px;
+  border-radius: 999px;
+  background: var(--blue-dark);
+}
+
+/* =========================================================
+13. VIDEO MODAL
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(26, 58, 82, 0.45);
+  backdrop-filter: blur(7px);
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 2rem 2.2rem;
+  text-align: center;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 26px 70px rgba(45, 124, 191, 0.20);
+}
+
+.modal-title {
+  margin-bottom: 0.3rem;
+  color: var(--text-dark);
+  font-family: 'Playfair Display', serif;
+  font-size: 1.55rem;
+}
+
+.modal-subtitle {
+  margin-bottom: 1.2rem;
+  color: var(--text-soft);
+  font-size: 0.86rem;
+  font-style: italic;
+}
+
+.yt-label {
+  margin-bottom: 0.5rem;
+  color: var(--blue-dark);
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.yt-input {
+  width: 100%;
+  padding: 11px 14px;
+  color: var(--text-dark);
+  border: 1.5px solid rgba(91, 168, 224, 0.42);
+  border-radius: 13px;
+  outline: none;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.9rem;
+}
+
+.yt-input:focus {
+  border-color: var(--blue-main);
+}
+
+.yt-frame-wrap {
+  display: none;
+  margin-top: 1rem;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
+  background: #000;
+}
+
+.yt-frame-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.open-btn {
+  display: none;
+  margin-top: 0.8rem;
+  padding: 10px 28px;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--pink-main), var(--blue-main));
+}
+
+.open-btn:hover {
+  transform: translateY(-2px);
+}
+
+.modal-close {
+  margin-top: 1rem;
+  color: var(--text-soft);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+/* =========================================================
+14. RESPONSIVE DESIGN
+========================================================= */
+
+@media (max-width: 640px) {
+  .card {
+    padding: 1.8rem 1.5rem;
+    border-radius: 24px;
+  }
+
+  .slide-title {
+    font-size: 1.75rem;
+  }
+
+  .slide-title.large {
+    font-size: 2.1rem;
+  }
+
+  .time-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+  </style>
+</head>
+<body>
+<!-- =========================================================
+VIDEO MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="videoModal">
+  <div class="modal-card">
+    <div class="modal-title">200 sorry</div>
+    <div class="modal-subtitle">A little something for you ♡</div>
+
+    <div class="yt-label">YouTube Link</div>
+
+    <input
+      class="yt-input"
+      id="ytInput"
+      type="text"
+      placeholder="Paste YouTube link here..."
+      value="https://youtu.be/XjajXerzrN8"
+      oninput="handleYtInput()"
+    >
+
+    <div class="yt-frame-wrap" id="ytFrameWrap">
+      <iframe
+        id="ytFrame"
+        allowfullscreen
+        allow="autoplay; encrypted-media">
+      </iframe>
+    </div>
+
+    <button class="open-btn" id="openYtBtn" onclick="openYt()" style="display: inline-block;">▶ Play</button>
+    <button class="modal-close" onclick="closeModal()">Close ✕</button>
+  </div>
+</div>
+
+<!-- =========================================================
+MAIN APP
+========================================================= -->
+
+<div class="app">
+  <div class="bubbles" id="bubblesEl"></div>
+
+  <div class="slides-container">
+
+    <!-- =====================================================
+    SLIDE 0: COVER
+    ====================================================== -->
+    <div class="slide active" data-index="0">
+      <div class="card cover">
+        <div class="cover-hearts"></div>
+        <div class="cover-date-tag">Date Plan · Seoul</div>
+
+        <h1 class="slide-title large">
+          Date <br>
+          <em>Saturday</em>
+        </h1>
+
+        <p class="slide-subtitle">
+           cafés, contemporary art,  food, and a river that glows in the afternoon light.
+          
+        </p>
+
+        <div class="cover-tagline">
+        
+        </div>
+
+        <button class="next-btn" onclick="goNext()">Let's go →</button>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 1: MEETING POINT
+    ====================================================== -->
+    <div class="slide" data-index="1">
+      <div class="card metro">
+        <div class="slide-num">Step 01</div>
+        <span class="slide-icon">🚇</span>
+
+        <h2 class="slide-title">Where we meet</h2>
+
+        <p class="slide-subtitle">
+          The starting point.
+        </p>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div class="info-text">
+            <strong>Exit — Jongno 3-ga Station</strong>
+            Easy meeting point before walking into Ikseon-dong.
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" onclick="goNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 2: CAFÉ SIKMUL
+    ====================================================== -->
+    <div class="slide" data-index="2">
+      <div class="card cafe wide">
+        <div class="slide-num">Step 02</div>
+        <span class="slide-icon">☕</span>
+
+        <h2 class="slide-title">Café SIKMUL</h2>
+
+        <div class="sikmul-badge">
+          ✨ 익선동 카페 식물 · ⭐ 4.5
+        </div>
+
+        <div class="cafe-grid">
+          <div class="cafe-card mint">
+            <div class="cafe-stars">📍 Location</div>
+            <div class="cafe-name">46-1 Donhwamun-ro 11da-gil, Jongno-gu</div>
+            <div class="cafe-detail">
+              In the heart of Ikseon-dong Hanok Village — just a short walk from Jongno 3-ga Exit 4.
+            </div>
+          </div>
+
+          <div class="cafe-card blue">
+            <div class="cafe-stars">🏚️ The Space</div>
+            <div class="cafe-name">Converted hanok cluster, founded 2014</div>
+            <div class="cafe-detail">
+              Four restored traditional Korean houses joined together, exposed rafters,
+              vintage sofas — pioneer of the hanok-café aesthetic.
+            </div>
+          </div>
+
+          <div class="cafe-card peach">
+            <div class="cafe-stars">☕ Must Try</div>
+            <div class="cafe-name">Sikmul Coffee & Plant Croffle</div>
+            <div class="cafe-detail">
+              Signature sweet-cream coffee and crispy croissant-waffle with caramelized banana.
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" onclick="goNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 3: MMCA
+    ====================================================== -->
+    <div class="slide" data-index="3">
+      <div class="card art">
+        <div class="slide-num">Step 03</div>
+        <span class="slide-icon">🎨</span>
+
+        <h2 class="slide-title">
+          National Museum of<br>
+          Modern &amp; Contemporary Art
+        </h2>
+
+        <p class="slide-subtitle">
+          World-class Korean contemporary art in one of Seoul's most iconic museums.
+        </p>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div class="info-text">
+            <strong>30 Samcheong-ro, Jongno-gu</strong>
+            15 min walk from Anguk Station — strolling through the beautiful Bukchon neighborhood.
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" onclick="goNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 4: AMOR NAPOLI
+    ====================================================== -->
+    <div class="slide" data-index="4">
+      <div class="card food wide">
+        <div class="slide-num">Step 04</div>
+        <span class="slide-icon">🍕</span>
+
+        <h2 class="slide-title">Lunch at Amor Napoli</h2>
+
+        <p class="slide-subtitle">
+          Italian bakery with a Korean soul, steps from Anguk Station.
+        </p>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div class="info-text">
+            <strong>15 Gyedong-gil, Jongno-gu 1 &amp; 2/F</strong>
+            2 min walk from the museum · Open from 8:00 AM
+          </div>
+        </div>
+
+        <div class="cafe-grid">
+          <div class="cafe-card peach">
+            <div class="cafe-stars">🥖 Specialties</div>
+            <div class="cafe-name">Southern Italian — First of its kind in Korea</div>
+            <div class="cafe-detail">
+              Margherita pizzetta, fermented ciabatta, traditional espresso,
+              all crafted with Italian techniques.
+            </div>
+          </div>
+
+          <div class="cafe-card mint">
+            <div class="cafe-stars">🌿 Atmosphere</div>
+            <div class="cafe-name">Charming terrace · Street views</div>
+            <div class="cafe-detail">
+              First floor terrace plus second floor seating. A warm spot to linger and talk.
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" onclick="goNext()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 5: CHEONGGYECHEON
+    ====================================================== -->
+    <div class="slide" data-index="5">
+      <div class="card river">
+        <div class="slide-num">Step 05</div>
+        <span class="slide-icon">🌊</span>
+
+        <h2 class="slide-title">Cheonggyecheon Stream</h2>
+
+        <p class="slide-subtitle">
+          Peaceful walk by the water.
+        </p>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div class="info-text">
+            <strong>Cheonggyecheon Stream, Jongno</strong>
+            Open 24 hrs · Free access · 10 min by metro from Anguk
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" onclick="goNext()">Pick a time →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 6: TIME PICKER
+    ====================================================== -->
+    <div class="slide" data-index="6">
+      <div class="card time">
+        <div class="slide-num">Choose a time</div>
+        <span class="slide-icon">📅</span>
+
+        <h2 class="slide-title">Saturday, May 2026</h2>
+
+        <p class="slide-subtitle">
+          What time should we meet?
+        </p>
+
+        <div class="time-grid" id="timeGrid"></div>
+        <div class="selected-display" id="selTimeDisplay"></div>
+
+        <div class="btn-row">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+          <button class="next-btn" id="nextTimeBtn" onclick="goNext()" disabled>Confirm! →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- =====================================================
+    SLIDE 7: CONFIRMATION
+    ====================================================== -->
+    <div class="slide" data-index="7">
+      <div class="card confirm">
+        <span class="confirm-emoji">🎉</span>
+
+        <div class="slide-num">All set!</div>
+
+        <h2 class="slide-title">Our date is confirmed</h2>
+
+        <div class="confirm-box">
+          <div class="confirm-label">Day</div>
+          <div class="confirm-value">Saturday</div>
+        </div>
+
+        <div class="confirm-box">
+          <div class="confirm-label">Time</div>
+          <div class="confirm-value" id="confirmTime">—</div>
+        </div>
+
+        <p class="slide-subtitle" style="margin-top: 0.9rem; margin-bottom: 0;">
+          📍 Meet at the exit of <strong>Jongno 3-ga Station</strong><br>
+        </p>
+
+        <div class="btn-row" style="margin-top: 1rem;">
+          <button class="back-btn" onclick="goBack()">← Back</button>
+        </div>
+
+        <button class="video-btn" onclick="openModal()">
+          <span>▶</span> VIDEO
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="progress-dots" id="progressDots"></div>
+</div>
+
+<script>
+/* =========================================================
+1. GLOBAL VARIABLES
+========================================================= */
+
+const TOTAL_SLIDES = 8;
+
+let currentSlide = 0;
+let selectedTime = null;
+
+const slides = document.querySelectorAll('.slide');
+const dotsContainer = document.getElementById('progressDots');
+
+/* =========================================================
+2. PROGRESS DOTS
+========================================================= */
+
+function buildDots() {
+  dotsContainer.innerHTML = '';
+
+  for (let i = 0; i < TOTAL_SLIDES; i++) {
+    const dot = document.createElement('div');
+
+    dot.className = i === 0 ? 'dot active' : 'dot';
+
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function updateDots() {
+  document.querySelectorAll('.dot').forEach((dot, index) => {
+    dot.className = index === currentSlide ? 'dot active' : 'dot';
+  });
+}
+
+/* =========================================================
+3. SLIDE NAVIGATION
+========================================================= */
+
+function goNext() {
+  if (currentSlide >= TOTAL_SLIDES - 1) return;
+
+  slides[currentSlide].classList.add('exit');
+  slides[currentSlide].classList.remove('active');
+
+  const previousSlide = currentSlide;
+
+  setTimeout(() => {
+    slides[previousSlide].classList.remove('exit');
+  }, 700);
+
+  currentSlide++;
+  slides[currentSlide].classList.add('active');
+
+  updateDots();
+
+  if (currentSlide === 7) {
+    fillConfirm();
+  }
+}
+
+function goBack() {
+  if (currentSlide <= 0) return;
+
+  slides[currentSlide].classList.remove('active');
+
+  currentSlide--;
+  slides[currentSlide].classList.add('active');
+
+  updateDots();
+}
+
+/* =========================================================
+4. TIME PICKER
+========================================================= */
+
+function buildTimePicker() {
+  const timeGrid = document.getElementById('timeGrid');
+  const times = [];
+
+  for (let hour = 10; hour < 18; hour++) {
+    times.push(`${hour}:00`);
+    times.push(`${hour}:30`);
+  }
+
+  times.push('18:00');
+
+  times.forEach((time) => {
+    const button = document.createElement('button');
+
+    button.className = 'time-btn';
+    button.dataset.value = time;
+    button.textContent = formatTime(time);
+
+    button.addEventListener('click', () => {
+      document.querySelectorAll('.time-btn.selected').forEach((selectedButton) => {
+        selectedButton.classList.remove('selected');
+      });
+
+      button.classList.add('selected');
+
+      selectedTime = button.textContent;
+
+      document.getElementById('selTimeDisplay').textContent = `✓ Time selected: ${selectedTime}`;
+      document.getElementById('nextTimeBtn').disabled = false;
+    });
+
+    timeGrid.appendChild(button);
+  });
+}
+
+function formatTime(time) {
+  const [rawHour, rawMinute] = time.split(':').map(Number);
+
+  const period = rawHour < 12 ? 'AM' : 'PM';
+  const hour12 = rawHour > 12 ? rawHour - 12 : rawHour;
+  const minute = rawMinute === 0 ? '00' : rawMinute;
+
+  return `${hour12}:${minute} ${period}`;
+}
+
+function fillConfirm() {
+  if (selectedTime) {
+    document.getElementById('confirmTime').textContent = selectedTime;
+  }
+}
+
+/* =========================================================
+5. VIDEO MODAL
+========================================================= */
+
+function openModal() {
+  document.getElementById('videoModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('videoModal').classList.remove('open');
+}
+
+function handleYtInput() {
+  const inputValue = document.getElementById('ytInput').value.trim();
+  const playButton = document.getElementById('openYtBtn');
+
+  playButton.style.display = inputValue ? 'inline-block' : 'none';
+}
+
+function openYt() {
+  const rawInput = document.getElementById('ytInput').value.trim();
+  let videoId = '';
+
+  try {
+    const url = new URL(rawInput);
+
+    if (url.hostname.includes('youtu.be')) {
+      videoId = url.pathname.slice(1);
+    } else {
+      videoId = url.searchParams.get('v') || '';
+    }
+  } catch(error) {
+    videoId = rawInput;
+  }
+
+  if (!videoId) return;
+
+  document.getElementById('ytFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+  document.getElementById('ytFrameWrap').style.display = 'block';
+}
+
+/* =========================================================
+6. BACKGROUND BUBBLES
+========================================================= */
+
+function buildBubbles() {
+  const bubblesContainer = document.getElementById('bubblesEl');
+
+  for (let i = 0; i < 18; i++) {
+    const bubble = document.createElement('div');
+    const size = 20 + Math.random() * 58;
+
+    bubble.className = 'bubble';
+
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    bubble.style.left = `${Math.random() * 100}%`;
+    bubble.style.animationDuration = `${8 + Math.random() * 12}s`;
+    bubble.style.animationDelay = `${Math.random() * 10}s`;
+
+    bubblesContainer.appendChild(bubble);
+  }
+}
+
+/* =========================================================
+7. INITIALIZE APP
+========================================================= */
+
+buildDots();
+buildTimePicker();
+buildBubbles();
+</script>
+</body>
+</html>
